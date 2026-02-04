@@ -1,0 +1,78 @@
+# ============================================================
+# EXAM CHEATING DETECTION — CONFIGURATION
+# ============================================================
+
+pipeline:
+  sample_fps: 5                    # Frames per second to extract from video
+  device: "auto"                   # auto | cpu | cuda:0 | mps
+  warmup_seconds: 5                # Seconds before seat assignment locks
+
+preprocessing:
+  resize_width: 1280
+  resize_height: 720
+  clahe_enabled: true
+  clahe_clip_limit: 2.0
+  clahe_grid_size: 8
+
+detection:
+  model: "yolov8m.pt"              # Auto-downloads on first run
+  confidence: 0.4
+  iou_threshold: 0.45
+  classes: [0]                     # COCO person class
+  imgsz: 1280
+
+tracking:
+  tracker: "botsort.yaml"          # botsort.yaml | bytetrack.yaml
+  track_buffer: 60                 # Frames to keep lost tracks
+  min_track_length: 10             # Min frames for a valid track
+
+pose:
+  backend: "ultralytics"           # ultralytics | mediapipe
+  model: "yolov8m-pose.pt"        # YOLOv8 pose model
+  keypoint_confidence: 0.2         # Lower threshold for distant/occluded faces
+
+head_pose:
+  yaw_looking_threshold: 35        # Degrees — head turned sideways
+  sustained_frames: 5              # Consecutive frames to count as "sustained look"
+
+spatial:
+  seat_warmup_frames: 150          # Frames before locking seat positions (5 sec at 30fps)
+  neighbor_max_distance: 250       # Pixels — max distance to be neighbors
+  close_proximity_distance: 120    # Pixels — very close range
+  teacher_movement_threshold: 400  # Total px displacement to classify as teacher
+  teacher_aspect_ratio: 1.4        # Height/width ratio for standing person
+
+features:
+  head_turn_threshold: 30          # Degrees from forward = "turned"
+  mutual_gaze_dot_threshold: -0.3  # Dot product below this = facing each other
+  gaze_toward_threshold: 0.6       # Dot product above this = looking at someone
+  hand_face_distance: 60           # Pixels — hand near face
+  hand_neighbor_distance: 100      # Pixels — hand reaching toward neighbor
+  wrist_elevation_threshold: 30    # Pixels above desk level
+
+classifier:
+  window_size_seconds: 10          # Sliding window duration
+  window_stride_seconds: 2         # Stride between windows
+  weights:
+    mutual_gaze: 0.30
+    sustained_head_turn: 0.25
+    whispering_posture: 0.15
+    body_lean: 0.10
+    hand_activity: 0.10
+    paper_movement: 0.05
+    proximity: 0.05
+  # Multi-criteria filter — ALL must pass
+  min_suspicious_windows: 2        # Must appear in N+ windows
+  min_confidence: 0.50             # Weighted score threshold
+  require_mutual: false            # Both students must show behavior
+  teacher_suppress_distance: 100   # Suppress if teacher within N px
+
+alerts:
+  tier_very_high: 0.85
+  tier_high: 0.70
+  tier_medium: 0.55
+  max_evidence_frames: 10
+  output_dir: "outputs"
+  save_annotated_video: false  # Set to false to skip annotated video
+  save_evidence_frames: false  # Set to false to skip evidence photos
+  save_report: true

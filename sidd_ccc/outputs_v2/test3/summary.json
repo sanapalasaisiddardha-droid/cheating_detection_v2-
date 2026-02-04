@@ -1,0 +1,1009 @@
+{
+  "video": "/Users/siddardha/Downloads/cehating_vieo_1hr.mp4",
+  "duration": 3684.04,
+  "frames_processed": 18420,
+  "processing_time": 4004.617865085602,
+  "total_students": 22,
+  "teacher_identified": true,
+  "cheating_pairs_found": 27,
+  "alerts": [
+    {
+      "seats": [
+        "R2_C5",
+        "R2_C7"
+      ],
+      "tier": "HIGH",
+      "confidence": 0.848,
+      "timestamps": [
+        [
+          518.2,
+          528.0
+        ],
+        [
+          742.4,
+          752.2
+        ],
+        [
+          516.2,
+          526.0
+        ],
+        [
+          520.2,
+          532.0
+        ],
+        [
+          744.4,
+          754.2
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (24700 instances)",
+        "Hand activity near face (24695 instances)",
+        "Mutual gaze (looking at each other) (9255 instances)",
+        "Sustained head turn toward peer (6747 instances)",
+        "Whispering posture detected (6727 instances)",
+        "Moved closer than normal (210 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C12",
+        "R2_C10"
+      ],
+      "tier": "HIGH",
+      "confidence": 0.787,
+      "timestamps": [
+        [
+          992.4,
+          1006.0
+        ],
+        [
+          994.8,
+          1008.0
+        ],
+        [
+          990.4,
+          1003.8
+        ],
+        [
+          1002.0,
+          1012.0
+        ],
+        [
+          985.8,
+          999.0
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (18750 instances)",
+        "Hand activity near face (18750 instances)",
+        "Sustained head turn toward peer (14721 instances)",
+        "Whispering posture detected (14636 instances)",
+        "Moved closer than normal (7930 instances)",
+        "Mutual gaze (looking at each other) (4264 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C6",
+        "R3_C1"
+      ],
+      "tier": "HIGH",
+      "confidence": 0.74,
+      "timestamps": [
+        [
+          94.0,
+          104.2
+        ],
+        [
+          96.4,
+          106.2
+        ],
+        [
+          91.6,
+          102.2
+        ],
+        [
+          89.6,
+          100.2
+        ],
+        [
+          98.4,
+          118.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (800 instances)",
+        "Moved closer than normal (800 instances)",
+        "Hand activity near face (683 instances)",
+        "Mutual gaze (looking at each other) (474 instances)",
+        "Sustained head turn toward peer (301 instances)",
+        "Whispering posture detected (194 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R3_C2",
+        "R2_C6"
+      ],
+      "tier": "HIGH",
+      "confidence": 0.735,
+      "timestamps": [
+        [
+          96.8,
+          119.4
+        ],
+        [
+          94.8,
+          106.6
+        ],
+        [
+          92.2,
+          104.0
+        ],
+        [
+          90.2,
+          101.0
+        ],
+        [
+          11.4,
+          85.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (550 instances)",
+        "Hand activity near face (408 instances)",
+        "Sustained head turn toward peer (384 instances)",
+        "Whispering posture detected (273 instances)",
+        "Mutual gaze (looking at each other) (226 instances)",
+        "Moved closer than normal (144 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C11",
+        "R2_C10"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.6900000000000001,
+      "timestamps": [
+        [
+          35.4,
+          45.2
+        ],
+        [
+          716.6,
+          732.0
+        ],
+        [
+          714.4,
+          729.4
+        ],
+        [
+          936.0,
+          950.2
+        ],
+        [
+          718.6,
+          734.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (12200 instances)",
+        "Hand activity near face (12200 instances)",
+        "Sustained head turn toward peer (10150 instances)",
+        "Whispering posture detected (10100 instances)",
+        "Moved closer than normal (7625 instances)",
+        "Mutual gaze (looking at each other) (1836 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C12",
+        "R2_C11"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.683,
+      "timestamps": [
+        [
+          454.6,
+          470.8
+        ],
+        [
+          172.2,
+          184.0
+        ],
+        [
+          170.0,
+          181.8
+        ],
+        [
+          174.2,
+          187.6
+        ],
+        [
+          178.0,
+          189.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (18500 instances)",
+        "Hand activity near face (18490 instances)",
+        "Sustained head turn toward peer (16870 instances)",
+        "Whispering posture detected (16435 instances)",
+        "Moved closer than normal (5308 instances)",
+        "Mutual gaze (looking at each other) (1740 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C7",
+        "R2_C8"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.6759999999999999,
+      "timestamps": [
+        [
+          90.2,
+          106.6
+        ],
+        [
+          97.0,
+          108.8
+        ],
+        [
+          88.0,
+          103.4
+        ],
+        [
+          99.0,
+          110.8
+        ],
+        [
+          86.0,
+          101.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (3250 instances)",
+        "Hand activity near face (3250 instances)",
+        "Sustained head turn toward peer (1064 instances)",
+        "Whispering posture detected (1064 instances)",
+        "Mutual gaze (looking at each other) (940 instances)",
+        "Moved closer than normal (1 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C6",
+        "R2_C8"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.6709999999999999,
+      "timestamps": [
+        [
+          81.4,
+          94.0
+        ],
+        [
+          85.6,
+          96.8
+        ],
+        [
+          87.6,
+          98.8
+        ],
+        [
+          46.4,
+          91.6
+        ],
+        [
+          44.4,
+          89.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (800 instances)",
+        "Hand activity near face (800 instances)",
+        "Sustained head turn toward peer (557 instances)",
+        "Whispering posture detected (414 instances)",
+        "Mutual gaze (looking at each other) (374 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C4",
+        "R3_C1"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.646,
+      "timestamps": [
+        [
+          36.0,
+          60.8
+        ],
+        [
+          33.4,
+          54.0
+        ],
+        [
+          26.6,
+          47.6
+        ],
+        [
+          21.8,
+          40.4
+        ],
+        [
+          38.4,
+          63.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (650 instances)",
+        "Moved closer than normal (627 instances)",
+        "Sustained head turn toward peer (579 instances)",
+        "Hand activity near face (546 instances)",
+        "Whispering posture detected (281 instances)",
+        "Mutual gaze (looking at each other) (179 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C4",
+        "R2_C5"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.634,
+      "timestamps": [
+        [
+          3.8,
+          40.4
+        ],
+        [
+          32.2,
+          44.8
+        ],
+        [
+          25.0,
+          42.6
+        ],
+        [
+          35.4,
+          46.8
+        ],
+        [
+          40.6,
+          51.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (600 instances)",
+        "Hand activity near face (600 instances)",
+        "Sustained head turn toward peer (503 instances)",
+        "Whispering posture detected (464 instances)",
+        "Moved closer than normal (389 instances)",
+        "Mutual gaze (looking at each other) (80 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C10",
+        "R2_C7"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.632,
+      "timestamps": [
+        [
+          894.4,
+          904.2
+        ],
+        [
+          707.0,
+          717.4
+        ],
+        [
+          709.0,
+          719.4
+        ],
+        [
+          1192.2,
+          1206.2
+        ],
+        [
+          896.4,
+          906.2
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (17000 instances)",
+        "Hand activity near face (17000 instances)",
+        "Mutual gaze (looking at each other) (9138 instances)",
+        "Moved closer than normal (3046 instances)",
+        "Sustained head turn toward peer (2226 instances)",
+        "Whispering posture detected (2216 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C4",
+        "R2_C6"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.63,
+      "timestamps": [
+        [
+          11.4,
+          43.8
+        ],
+        [
+          19.4,
+          46.0
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (100 instances)",
+        "Hand activity near face (97 instances)",
+        "Moved closer than normal (85 instances)",
+        "Sustained head turn toward peer (84 instances)",
+        "Whispering posture detected (57 instances)",
+        "Mutual gaze (looking at each other) (26 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C5",
+        "R2_C8"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.62,
+      "timestamps": [
+        [
+          95.8,
+          107.8
+        ],
+        [
+          93.4,
+          104.6
+        ],
+        [
+          98.2,
+          110.0
+        ],
+        [
+          118.6,
+          173.2
+        ],
+        [
+          91.4,
+          102.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (2950 instances)",
+        "Hand activity near face (2950 instances)",
+        "Sustained head turn toward peer (937 instances)",
+        "Whispering posture detected (937 instances)",
+        "Mutual gaze (looking at each other) (581 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C14",
+        "R2_C13"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.618,
+      "timestamps": [
+        [
+          3.8,
+          34.0
+        ],
+        [
+          74.6,
+          88.4
+        ],
+        [
+          76.6,
+          90.8
+        ],
+        [
+          79.4,
+          92.8
+        ],
+        [
+          10.4,
+          36.0
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (2300 instances)",
+        "Hand activity near face (2300 instances)",
+        "Sustained head turn toward peer (2064 instances)",
+        "Whispering posture detected (2064 instances)",
+        "Mutual gaze (looking at each other) (130 instances)",
+        "Moved closer than normal (86 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C2",
+        "R3_C1"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.612,
+      "timestamps": [
+        [
+          194.4,
+          205.0
+        ],
+        [
+          463.8,
+          474.8
+        ],
+        [
+          200.4,
+          218.4
+        ],
+        [
+          192.2,
+          202.4
+        ],
+        [
+          196.4,
+          207.0
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (5750 instances)",
+        "Hand activity near face (5740 instances)",
+        "Sustained head turn toward peer (4597 instances)",
+        "Whispering posture detected (2906 instances)",
+        "Moved closer than normal (1332 instances)",
+        "Mutual gaze (looking at each other) (1252 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R3_C4",
+        "R2_C14"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.612,
+      "timestamps": [
+        [
+          4.6,
+          19.6
+        ],
+        [
+          21.8,
+          33.6
+        ],
+        [
+          23.8,
+          35.6
+        ],
+        [
+          25.8,
+          37.6
+        ],
+        [
+          27.8,
+          39.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (2250 instances)",
+        "Hand activity near face (2170 instances)",
+        "Sustained head turn toward peer (2105 instances)",
+        "Whispering posture detected (1908 instances)",
+        "Mutual gaze (looking at each other) (82 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C7",
+        "R2_C6"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.599,
+      "timestamps": [
+        [
+          22.8,
+          45.4
+        ],
+        [
+          19.4,
+          42.4
+        ],
+        [
+          11.4,
+          38.0
+        ],
+        [
+          30.4,
+          52.2
+        ],
+        [
+          32.8,
+          82.0
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (800 instances)",
+        "Hand activity near face (794 instances)",
+        "Sustained head turn toward peer (417 instances)",
+        "Mutual gaze (looking at each other) (392 instances)",
+        "Whispering posture detected (270 instances)",
+        "Moved closer than normal (144 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C5",
+        "R2_C6"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.598,
+      "timestamps": [
+        [
+          19.6,
+          45.8
+        ],
+        [
+          32.2,
+          82.2
+        ],
+        [
+          23.6,
+          67.8
+        ],
+        [
+          39.4,
+          84.2
+        ],
+        [
+          68.0,
+          90.2
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (750 instances)",
+        "Hand activity near face (750 instances)",
+        "Mutual gaze (looking at each other) (409 instances)",
+        "Sustained head turn toward peer (331 instances)",
+        "Whispering posture detected (213 instances)",
+        "Moved closer than normal (182 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C12",
+        "R3_C3"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.593,
+      "timestamps": [
+        [
+          40.2,
+          61.6
+        ],
+        [
+          36.6,
+          59.6
+        ],
+        [
+          31.6,
+          50.0
+        ],
+        [
+          45.4,
+          64.2
+        ],
+        [
+          64.4,
+          79.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (1250 instances)",
+        "Hand activity near face (1198 instances)",
+        "Sustained head turn toward peer (830 instances)",
+        "Whispering posture detected (717 instances)",
+        "Moved closer than normal (409 instances)",
+        "Mutual gaze (looking at each other) (82 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C12",
+        "R4_C2"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.573,
+      "timestamps": [
+        [
+          11.8,
+          33.2
+        ],
+        [
+          5.8,
+          26.4
+        ],
+        [
+          3.8,
+          22.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (150 instances)",
+        "Hand activity near face (141 instances)",
+        "Sustained head turn toward peer (135 instances)",
+        "Whispering posture detected (101 instances)",
+        "Moved closer than normal (63 instances)",
+        "Mutual gaze (looking at each other) (11 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C11",
+        "R2_C14"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.57,
+      "timestamps": [
+        [
+          64.6,
+          75.8
+        ],
+        [
+          61.0,
+          73.6
+        ],
+        [
+          47.0,
+          56.8
+        ],
+        [
+          66.6,
+          78.6
+        ],
+        [
+          45.0,
+          54.8
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (6600 instances)",
+        "Hand activity near face (6600 instances)",
+        "Mutual gaze (looking at each other) (1183 instances)",
+        "Sustained head turn toward peer (575 instances)",
+        "Whispering posture detected (575 instances)",
+        "Moved closer than normal (280 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C9",
+        "R2_C8"
+      ],
+      "tier": "MEDIUM",
+      "confidence": 0.5609999999999999,
+      "timestamps": [
+        [
+          17.2,
+          38.8
+        ],
+        [
+          10.0,
+          24.2
+        ],
+        [
+          20.2,
+          42.4
+        ],
+        [
+          15.2,
+          35.8
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (200 instances)",
+        "Hand activity near face (195 instances)",
+        "Sustained head turn toward peer (149 instances)",
+        "Whispering posture detected (106 instances)",
+        "Mutual gaze (looking at each other) (63 instances)",
+        "Moved closer than normal (3 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C4",
+        "R3_C2"
+      ],
+      "tier": "LOW",
+      "confidence": 0.548,
+      "timestamps": [
+        [
+          45.0,
+          62.4
+        ],
+        [
+          11.4,
+          52.4
+        ],
+        [
+          30.2,
+          60.0
+        ],
+        [
+          47.8,
+          65.6
+        ],
+        [
+          17.2,
+          55.6
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (300 instances)",
+        "Sustained head turn toward peer (291 instances)",
+        "Hand activity near face (254 instances)",
+        "Moved closer than normal (190 instances)",
+        "Whispering posture detected (88 instances)",
+        "Mutual gaze (looking at each other) (39 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C11",
+        "R2_C13"
+      ],
+      "tier": "LOW",
+      "confidence": 0.5219999999999999,
+      "timestamps": [
+        [
+          68.0,
+          77.8
+        ],
+        [
+          47.8,
+          60.8
+        ],
+        [
+          70.0,
+          79.8
+        ],
+        [
+          72.0,
+          81.8
+        ],
+        [
+          52.2,
+          65.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (2050 instances)",
+        "Hand activity near face (2050 instances)",
+        "Mutual gaze (looking at each other) (713 instances)",
+        "Sustained head turn toward peer (391 instances)",
+        "Whispering posture detected (391 instances)",
+        "Moved closer than normal (3 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C10",
+        "R2_C13"
+      ],
+      "tier": "LOW",
+      "confidence": 0.514,
+      "timestamps": [
+        [
+          155.0,
+          165.0
+        ],
+        [
+          151.0,
+          161.0
+        ],
+        [
+          45.8,
+          58.2
+        ],
+        [
+          48.2,
+          61.2
+        ],
+        [
+          50.2,
+          63.2
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (2850 instances)",
+        "Hand activity near face (2850 instances)",
+        "Mutual gaze (looking at each other) (1447 instances)",
+        "Moved closer than normal (745 instances)",
+        "Sustained head turn toward peer (458 instances)",
+        "Whispering posture detected (458 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C11",
+        "R3_C3"
+      ],
+      "tier": "LOW",
+      "confidence": 0.506,
+      "timestamps": [
+        [
+          72.6,
+          86.4
+        ],
+        [
+          69.4,
+          84.4
+        ],
+        [
+          42.6,
+          62.4
+        ],
+        [
+          37.0,
+          59.8
+        ],
+        [
+          67.2,
+          82.4
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (800 instances)",
+        "Hand activity near face (785 instances)",
+        "Mutual gaze (looking at each other) (597 instances)",
+        "Sustained head turn toward peer (114 instances)",
+        "Whispering posture detected (41 instances)",
+        "Moved closer than normal (16 instances)"
+      ]
+    },
+    {
+      "seats": [
+        "R2_C11",
+        "R2_C8"
+      ],
+      "tier": "LOW",
+      "confidence": 0.5,
+      "timestamps": [
+        [
+          131.0,
+          142.8
+        ],
+        [
+          133.0,
+          145.0
+        ],
+        [
+          135.0,
+          147.0
+        ],
+        [
+          137.2,
+          149.0
+        ],
+        [
+          141.0,
+          151.2
+        ]
+      ],
+      "behaviors": [
+        "Body leaning toward peer (3600 instances)",
+        "Hand activity near face (3600 instances)",
+        "Mutual gaze (looking at each other) (2187 instances)",
+        "Sustained head turn toward peer (8 instances)",
+        "Whispering posture detected (8 instances)"
+      ]
+    }
+  ]
+}
