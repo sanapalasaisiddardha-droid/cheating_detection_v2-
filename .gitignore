@@ -50,7 +50,7 @@ venv.bak/
 # Project-specific outputs
 sidd_ccc/outputs/
 sidd_ccc/results/
-outputs/
+outputs_v2/
 results/
 
 # Model weights and large files

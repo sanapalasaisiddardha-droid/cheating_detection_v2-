@@ -3,7 +3,6 @@ PDF Report Generator
 Creates detailed reports using ReportLab.
 """
 
-import os
 from typing import Dict, List, Any
 from datetime import datetime
 
@@ -13,7 +12,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle,
-    PageBreak, Image
+    PageBreak
 )
 
 
@@ -179,12 +178,10 @@ class ReportGenerator:
 
         # Summary statistics
         total_students = len(spatial.seats)
-        teacher_found = spatial.teacher_id is not None
 
         summary_text = f"""
         <b>Analysis Overview:</b><br/>
         - Total students identified: {total_students}<br/>
-        - Teacher identified: {'Yes' if teacher_found else 'No'}<br/>
         - Potential cheating pairs detected: {len(alerts)}<br/>
         """
 
@@ -313,8 +310,8 @@ class ReportGenerator:
         <br/><br/>
         <b>4. Spatial Analysis</b><br/>
         Automatic seat assignment based on median positions during warm-up period.
-        Neighbor graphs built using distance thresholds. Teachers identified by
-        movement patterns and standing posture.
+        Neighbor graphs built using distance thresholds. Standing students are
+        excluded from cheating analysis.
         <br/><br/>
         <b>5. Behavioral Feature Extraction</b><br/>
         Per-frame features include: head direction, mutual gaze detection, whispering
@@ -324,7 +321,7 @@ class ReportGenerator:
         <b>6. Temporal Classification</b><br/>
         Sliding window analysis (10-second windows, 2-second stride) with weighted
         scoring. Multi-criteria filter requires: minimum suspicious windows, confidence
-        threshold, mutual behavior evidence, and absence of nearby teacher.
+        threshold, and mutual behavior evidence.
         <br/><br/>
         <b>7. Alert Generation</b><br/>
         Confidence tiers (Very High > 85%, High > 70%, Medium > 55%) with timestamped
@@ -333,8 +330,7 @@ class ReportGenerator:
         <b>Important Notes:</b><br/>
         - This system is designed to flag potential incidents for human review.<br/>
         - False positives may occur due to normal classroom interactions.<br/>
-        - Results should be verified by reviewing the evidence frames and video.<br/>
-        - Teacher proximity during flagged periods may indicate supervised activity.
+        - Results should be verified by reviewing the evidence frames and video.
         """
 
         elements.append(Paragraph(methodology_text, self.styles['Normal']))

@@ -21,9 +21,7 @@ class BehaviorFeatureExtractor:
         self.config = config
 
         # Load thresholds from config
-        self.head_turn_threshold = config["features"]["head_turn_threshold"]
         self.mutual_gaze_dot_threshold = config["features"]["mutual_gaze_dot_threshold"]
-        self.gaze_toward_threshold = config["features"]["gaze_toward_threshold"]
         self.hand_face_distance = config["features"]["hand_face_distance"]
         self.hand_neighbor_distance = config["features"]["hand_neighbor_distance"]
         self.wrist_elevation_threshold = config["features"]["wrist_elevation_threshold"]
@@ -158,17 +156,9 @@ class BehaviorFeatureExtractor:
         # Direction from B to A
         dir_b_to_a = -dir_a_to_b
 
-        # Check if A is looking at B
+        # Directional gaze check disabled (gaze_toward_threshold removed)
         a_looking_at_b = False
-        if dir_a is not None:
-            dot_a = np.dot(dir_a, dir_a_to_b)
-            a_looking_at_b = dot_a > self.gaze_toward_threshold
-
-        # Check if B is looking at A
         b_looking_at_a = False
-        if dir_b is not None:
-            dot_b = np.dot(dir_b, dir_b_to_a)
-            b_looking_at_a = dot_b > self.gaze_toward_threshold
 
         # Whispering detection (looking at + hand near face)
         a_whispering_toward_b = a_looking_at_b and student_a["hand_near_face"]

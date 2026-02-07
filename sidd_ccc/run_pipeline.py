@@ -7,7 +7,6 @@ Usage:
 
 import argparse
 import os
-import sys
 import time
 import json
 
@@ -22,7 +21,7 @@ from core.spatial import SpatialAnalyzer
 from core.features import BehaviorFeatureExtractor
 from core.classifier import TemporalClassifier
 from core.alert_generator import AlertGenerator
-from utils.visualization import draw_detection, draw_head_pose_arrow, draw_info_overlay
+from utils.visualization import draw_detection, draw_head_pose_arrow, draw_info_overlay, generate_id_mapping_snapshot
 from utils.report_generator import ReportGenerator
 
 
@@ -59,7 +58,7 @@ def compute_iou(box1: np.ndarray, box2: np.ndarray) -> float:
     return inter / union if union > 0 else 0
 
 
-def match_pose_to_detection(detections: list, pose_results: list) -> dict:
+def match_pose_to_detection(detections: list, pose_results: list, iou_threshold: float = 0.5) -> dict:
     """Match pose estimations to tracked detections using IoU overlap."""
     matched = {}
 
@@ -74,7 +73,7 @@ def match_pose_to_detection(detections: list, pose_results: list) -> dict:
                 best_iou = iou
                 best_pose = pose
 
-        if best_iou > 0.3 and best_pose is not None:
+        if best_iou > iou_threshold and best_pose is not None:
             matched[det["track_id"]] = best_pose
 
     return matched
@@ -167,7 +166,8 @@ def main():
 
         # --- Stage 3: Pose Estimation ---
         pose_results = pose_estimator.estimate(frame)
-        pose_map = match_pose_to_detection(detections, pose_results)
+        pose_iou_threshold = config["spatial"]["pose_iou_threshold"]
+        pose_map = match_pose_to_detection(detections, pose_results, pose_iou_threshold)
 
         # Compute head pose for each detection that has pose
         head_poses = {}
@@ -184,14 +184,17 @@ def main():
         # --- Stage 5: Feature Extraction ---
         student_features = {}
         for det in detections:
-            tid = det["track_id"]
-            if spatial.is_teacher(tid):
+            raw_tid = det["track_id"]
+            tid = spatial.resolve_id(raw_tid)
+            # Skip standing students — they don't copy while standing
+            if spatial.is_standing(tid):
                 continue
             seat = spatial.seats.get(tid)
             if seat is None:
                 continue
-            pose_data = pose_map.get(tid)
-            hp = head_poses.get(tid)
+            # Pose/head data is keyed by original tracker ID
+            pose_data = pose_map.get(raw_tid)
+            hp = head_poses.get(raw_tid)
             if pose_data is None or hp is None:
                 continue
 
@@ -203,31 +206,35 @@ def main():
         # Pairwise features for all neighbor pairs
         pair_features_list = []
         processed_pairs = set()
+        processed_seat_pairs = set()
         for tid, sf in student_features.items():
-            for neighbor_id in spatial.get_neighbors(tid):
-                pair_key = tuple(sorted([tid, neighbor_id]))
+            canonical_tid = spatial.resolve_id(tid)
+            for neighbor_id in spatial.get_neighbors(canonical_tid):
+                canonical_neighbor = spatial.resolve_id(neighbor_id)
+                pair_key = tuple(sorted([canonical_tid, canonical_neighbor]))
                 if pair_key in processed_pairs:
                     continue
                 processed_pairs.add(pair_key)
 
-                if neighbor_id not in student_features:
+                if canonical_neighbor not in student_features:
                     continue
 
-                pf = feature_extractor.extract_pair_features(
-                    sf, student_features[neighbor_id],
-                    spatial.seats[tid], spatial.seats[neighbor_id]
-                )
+                # Skip self-pairs (same physical seat)
+                seat_a = spatial.get_seat_label(canonical_tid)
+                seat_b = spatial.get_seat_label(canonical_neighbor)
+                if seat_a == seat_b:
+                    continue
 
-                # Attach teacher proximity info
-                teacher_pos = spatial.get_teacher_position(detections)
-                if teacher_pos is not None:
-                    d_to_pair = min(
-                        np.linalg.norm(np.array(teacher_pos) - np.array(spatial.seats[tid])),
-                        np.linalg.norm(np.array(teacher_pos) - np.array(spatial.seats[neighbor_id]))
-                    )
-                    pf["teacher_distance"] = d_to_pair
-                else:
-                    pf["teacher_distance"] = float('inf')
+                # Skip duplicate seat-label pairs (different IDs, same seats)
+                seat_pair = tuple(sorted([seat_a, seat_b]))
+                if seat_pair in processed_seat_pairs:
+                    continue
+                processed_seat_pairs.add(seat_pair)
+
+                pf = feature_extractor.extract_pair_features(
+                    sf, student_features[canonical_neighbor],
+                    spatial.seats[canonical_tid], spatial.seats[canonical_neighbor]
+                )
 
                 pair_features_list.append(pf)
 
@@ -240,9 +247,9 @@ def main():
             tid = det["track_id"]
             color = (0, 255, 0)  # green default
             label = spatial.get_seat_label(tid)
-            if spatial.is_teacher(tid):
-                color = (255, 200, 0)  # cyan for teacher
-                label = "TEACHER"
+            if spatial.is_standing(tid):
+                color = (200, 200, 200)  # grey for standing students
+                label = "Standing"
             draw_detection(vis_frame, det["bbox"], tid, color, label)
 
             # Draw head pose arrow
@@ -292,6 +299,18 @@ def main():
           f"({frame_count/elapsed:.1f} fps)")
 
     # ===================================================
+    # SAVE ID MAPPING SNAPSHOT
+    # ===================================================
+    if frame_buffer:
+        last_frame_idx = max(frame_buffer.keys())
+        last_data = frame_buffer[last_frame_idx]
+        mapping_path = os.path.join(output_dir, "id_mapping_snapshot.jpg")
+        num_mapped = generate_id_mapping_snapshot(
+            last_data["frame"], last_data["detections"], spatial, mapping_path
+        )
+        print(f"[OUTPUT] ID mapping snapshot saved: {mapping_path} ({num_mapped} students)")
+
+    # ===================================================
     # CLASSIFICATION
     # ===================================================
     print("\n[CLASSIFY] Running temporal analysis...")
@@ -337,7 +356,6 @@ def main():
         "frames_processed": frame_count,
         "processing_time": elapsed,
         "total_students": len(spatial.seats),
-        "teacher_identified": spatial.teacher_id is not None,
         "cheating_pairs_found": len(cheating_pairs),
         "alerts": [
             {

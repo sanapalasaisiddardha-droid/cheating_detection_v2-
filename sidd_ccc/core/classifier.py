@@ -32,7 +32,6 @@ class TemporalClassifier:
         self.min_suspicious_windows = config["classifier"]["min_suspicious_windows"]
         self.min_confidence = config["classifier"]["min_confidence"]
         self.require_mutual = config["classifier"]["require_mutual"]
-        self.teacher_suppress_distance = config["classifier"]["teacher_suppress_distance"]
 
         # Feature buffer: pair_id -> list of frame features
         self.pair_feature_buffer: Dict[Tuple[int, int], List[Dict[str, Any]]] = defaultdict(list)
@@ -121,13 +120,6 @@ class TemporalClassifier:
             start_time = window_frames[0]["timestamp"]
             end_time = window_frames[-1]["timestamp"]
 
-            # Track teacher distance during window
-            teacher_distances = [
-                f.get("teacher_distance", float('inf'))
-                for f in window_frames
-            ]
-            min_teacher_distance = min(teacher_distances)
-
             scored_windows.append({
                 "start_idx": start_idx,
                 "end_idx": end_idx,
@@ -135,7 +127,6 @@ class TemporalClassifier:
                 "end_time": end_time,
                 "score": score,
                 "behavior_counts": behavior_counts,
-                "min_teacher_distance": min_teacher_distance,
             })
 
         return scored_windows
@@ -161,6 +152,7 @@ class TemporalClassifier:
             "sustained_head_turn": 0,
             "whispering_posture": 0,
             "body_lean": 0,
+            "headturn_hand_on_face": 0,
             "hand_activity": 0,
             "paper_movement": 0,
             "proximity": 0,
@@ -171,17 +163,23 @@ class TemporalClassifier:
             if frame.get("mutual_gaze", False):
                 counts["mutual_gaze"] += 1
 
-            # Sustained head turn (either person looking at the other)
-            if frame.get("a_looking_at_b", False) or frame.get("b_looking_at_a", False):
-                counts["sustained_head_turn"] += 1
-
-            # Whispering posture
-            if frame.get("a_whispering_toward_b", False) or frame.get("b_whispering_toward_a", False):
-                counts["whispering_posture"] += 1
-
-            # Body lean (using shoulder angle deviation from typical)
+            # Head turn + hand on face (either person turning head AND hand near face)
             student_a = frame.get("student_a", {})
             student_b = frame.get("student_b", {})
+            a_headturn_hand = student_a.get("is_looking_sideways", False) and student_a.get("hand_near_face", False)
+            b_headturn_hand = student_b.get("is_looking_sideways", False) and student_b.get("hand_near_face", False)
+            if a_headturn_hand or b_headturn_hand:
+                counts["headturn_hand_on_face"] += 1
+
+            # Sustained head turn (either person's head turned sideways >60°)
+            a_sideways = student_a.get("is_looking_sideways", False)
+            b_sideways = student_b.get("is_looking_sideways", False)
+            if a_sideways or b_sideways:
+                counts["sustained_head_turn"] += 1
+
+            # Whispering posture (both students looking sideways — mutual engagement)
+            if a_sideways and b_sideways:
+                counts["whispering_posture"] += 1
             shoulder_a = abs(student_a.get("shoulder_angle", 0))
             shoulder_b = abs(student_b.get("shoulder_angle", 0))
             if shoulder_a > 15 or shoulder_b > 15:  # More than 15 degrees tilt
@@ -239,13 +237,6 @@ class TemporalClassifier:
                 has_mutual = True
                 break
 
-        # Check teacher suppression
-        teacher_suppressed = False
-        for w in suspicious_windows:
-            if w["min_teacher_distance"] < self.teacher_suppress_distance:
-                teacher_suppressed = True
-                break
-
         # Apply multi-criteria filter
         is_cheating = True
         fail_reason = None
@@ -265,11 +256,6 @@ class TemporalClassifier:
             is_cheating = False
             fail_reason = "no_mutual_behavior"
 
-        # Criterion 4: Teacher suppression
-        if teacher_suppressed:
-            is_cheating = False
-            fail_reason = "teacher_nearby"
-
         # Sort evidence windows by score
         evidence_windows = sorted(suspicious_windows, key=lambda w: w["score"], reverse=True)[:5]
 
@@ -286,6 +272,5 @@ class TemporalClassifier:
             "evidence_windows": evidence_windows,
             "behavior_summary": total_counts,
             "has_mutual": has_mutual,
-            "teacher_suppressed": teacher_suppressed,
             "fail_reason": fail_reason,
         }

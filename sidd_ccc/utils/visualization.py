@@ -5,7 +5,7 @@ Drawing functions for video annotation.
 
 import cv2
 import numpy as np
-from typing import List, Tuple, Optional, Any
+from typing import List, Tuple, Optional
 
 
 def draw_detection(
@@ -95,34 +95,11 @@ def draw_head_pose_arrow(
     )
 
 
-def draw_pair_line(
-    frame: np.ndarray,
-    center_a: Tuple[float, float],
-    center_b: Tuple[float, float],
-    color: Tuple[int, int, int],
-    thickness: int = 2
-):
-    """
-    Draw line connecting two persons.
-
-    Args:
-        frame: Frame to draw on (modified in place)
-        center_a: Center of person A
-        center_b: Center of person B
-        color: BGR color tuple
-        thickness: Line thickness
-    """
-    pt_a = (int(center_a[0]), int(center_a[1]))
-    pt_b = (int(center_b[0]), int(center_b[1]))
-
-    cv2.line(frame, pt_a, pt_b, color, thickness)
-
-
 def draw_info_overlay(
     frame: np.ndarray,
     timestamp: float,
     frame_idx: int,
-    alerts_active: List[Any]
+    alerts_active: list
 ):
     """
     Draw information overlay at the top of the frame.
@@ -161,118 +138,78 @@ def draw_info_overlay(
     )
 
 
-def annotate_evidence_frame(
+def generate_id_mapping_snapshot(
     frame: np.ndarray,
-    pair_detections: List[dict],
-    pair_features: dict,
-    score: float,
-    timestamp: float
-) -> np.ndarray:
-    """
-    Create fully annotated evidence frame.
-
-    Args:
-        frame: Original frame
-        pair_detections: Detection dicts for the pair
-        pair_features: Pair features dictionary
-        score: Confidence score
-        timestamp: Timestamp in seconds
-
-    Returns:
-        Annotated frame copy
-    """
-    annotated = frame.copy()
-    h, w = annotated.shape[:2]
-
-    # Draw red bounding boxes for the pair
-    for det in pair_detections:
-        draw_detection(annotated, det["bbox"], det["track_id"], (0, 0, 255))
-
-    # Draw connecting line between the pair
-    if len(pair_detections) >= 2:
-        draw_pair_line(
-            annotated,
-            pair_detections[0]["center"],
-            pair_detections[1]["center"],
-            (0, 0, 255),
-            3
-        )
-
-    # Draw header overlay
-    overlay = annotated.copy()
-    cv2.rectangle(overlay, (0, 0), (w, 80), (0, 0, 100), -1)
-    cv2.addWeighted(overlay, 0.5, annotated, 0.5, 0, annotated)
-
-    # Add evidence text
-    text1 = f"EVIDENCE FRAME - Score: {score:.2f}"
-    text2 = f"Time: {timestamp:.2f}s"
-
-    cv2.putText(annotated, text1, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-    cv2.putText(annotated, text2, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (200, 200, 200), 1)
-
-    # Add behavior indicators
-    behaviors = []
-    if pair_features.get("mutual_gaze"):
-        behaviors.append("MUTUAL GAZE")
-    if pair_features.get("a_looking_at_b") or pair_features.get("b_looking_at_a"):
-        behaviors.append("LOOKING AT PEER")
-    if pair_features.get("a_whispering_toward_b") or pair_features.get("b_whispering_toward_a"):
-        behaviors.append("WHISPERING")
-    if pair_features.get("a_showing_paper") or pair_features.get("b_showing_paper"):
-        behaviors.append("SHOWING PAPER")
-
-    # Draw behavior labels
-    y_offset = h - 30
-    for behavior in behaviors:
-        cv2.putText(
-            annotated,
-            behavior,
-            (10, y_offset),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 255, 255),
-            1
-        )
-        y_offset -= 20
-
-    return annotated
-
-
-def draw_skeleton(
-    frame: np.ndarray,
-    keypoints: np.ndarray,
-    color: Tuple[int, int, int] = (0, 255, 0),
-    confidence_threshold: float = 0.3
+    detections: List[dict],
+    spatial,
+    output_path: str
 ):
     """
-    Draw body skeleton from COCO keypoints.
+    Generate a student ID mapping snapshot showing ALL known seated students
+    using their stored seat positions, not just current-frame detections.
 
     Args:
-        frame: Frame to draw on (modified in place)
-        keypoints: Array of shape (17, 3) with x, y, confidence
-        color: BGR color tuple
-        confidence_threshold: Minimum confidence to draw a keypoint
+        frame: The video frame to annotate
+        detections: List of detection dicts from that frame
+        spatial: SpatialAnalyzer instance with seat/label data
+        output_path: Path to save the snapshot image
     """
-    # COCO skeleton connections
-    skeleton = [
-        (0, 1), (0, 2), (1, 3), (2, 4),  # Head
-        (5, 6), (5, 7), (7, 9), (6, 8), (8, 10),  # Arms
-        (5, 11), (6, 12), (11, 12),  # Torso
-        (11, 13), (13, 15), (12, 14), (14, 16)  # Legs
-    ]
+    snapshot = frame.copy()
+    h, w = snapshot.shape[:2]
 
-    # Draw connections
-    for start_idx, end_idx in skeleton:
-        if (keypoints[start_idx][2] > confidence_threshold and
-            keypoints[end_idx][2] > confidence_threshold):
+    num_students = len(spatial.seats)
 
-            start_pt = (int(keypoints[start_idx][0]), int(keypoints[start_idx][1]))
-            end_pt = (int(keypoints[end_idx][0]), int(keypoints[end_idx][1]))
+    # Draw header
+    overlay = snapshot.copy()
+    cv2.rectangle(overlay, (0, 0), (w, 50), (0, 0, 0), -1)
+    cv2.addWeighted(overlay, 0.7, snapshot, 0.3, 0, snapshot)
 
-            cv2.line(frame, start_pt, end_pt, color, 2)
+    title = f"Student ID Mapping - {num_students} Students Detected"
+    cv2.putText(snapshot, title, (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
 
-    # Draw keypoints
-    for i, kpt in enumerate(keypoints):
-        if kpt[2] > confidence_threshold:
-            pt = (int(kpt[0]), int(kpt[1]))
-            cv2.circle(frame, pt, 4, color, -1)
+    # Draw ALL known seats using stored seat positions
+    for tid, seat_pos in spatial.seats.items():
+        label = spatial.get_seat_label(tid)
+        stability = spatial.get_stability_score(tid)
+        cx, cy = int(seat_pos[0]), int(seat_pos[1])
+
+        # Color by stability
+        if stability >= 0.8:
+            color = (0, 255, 0)      # Green
+        elif stability >= 0.6:
+            color = (0, 200, 255)    # Yellow
+        else:
+            color = (0, 100, 255)    # Orange
+
+        # Draw circle marker at seat position
+        cv2.circle(snapshot, (cx, cy), 8, color, -1)
+        cv2.circle(snapshot, (cx, cy), 8, (255, 255, 255), 2)
+
+        # Draw label
+        text = f"{label}"
+        (tw, th), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+        label_x = cx - tw // 2
+        label_y = cy - 15
+
+        cv2.rectangle(snapshot, (label_x - 2, label_y - th - 2),
+                      (label_x + tw + 2, label_y + 2), color, -1)
+        cv2.putText(snapshot, text, (label_x, label_y),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
+    # Draw legend at bottom-left
+    legend_y = h - 80
+    overlay2 = snapshot.copy()
+    cv2.rectangle(overlay2, (0, legend_y - 10), (280, h), (0, 0, 0), -1)
+    cv2.addWeighted(overlay2, 0.6, snapshot, 0.4, 0, snapshot)
+
+    cv2.putText(snapshot, "Legend:", (10, legend_y + 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.circle(snapshot, (20, legend_y + 35), 5, (0, 255, 0), -1)
+    cv2.putText(snapshot, "High Stability (>0.8)", (35, legend_y + 40),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
+    cv2.circle(snapshot, (20, legend_y + 55), 5, (0, 200, 255), -1)
+    cv2.putText(snapshot, "Medium Stability (0.6-0.8)", (35, legend_y + 60),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
+
+    cv2.imwrite(output_path, snapshot)
+    return num_students
