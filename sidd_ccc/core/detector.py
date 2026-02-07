@@ -4,7 +4,7 @@ Uses YOLOv8 for detection and BoT-SORT for multi-object tracking.
 """
 
 import numpy as np
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from ultralytics import YOLO
 
 

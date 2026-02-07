@@ -45,7 +45,7 @@ class AlertGenerator:
         Returns:
             List of alert dictionaries
         """
-        alerts = []
+        raw_alerts = []
 
         for pair_id, result in classifications.items():
             if not result["is_cheating"]:
@@ -53,6 +53,14 @@ class AlertGenerator:
 
             track_id_a, track_id_b = pair_id
             confidence = result["confidence"]
+
+            # Get seat labels
+            label_a = self.spatial.get_seat_label(track_id_a)
+            label_b = self.spatial.get_seat_label(track_id_b)
+
+            # Skip self-pairs (same physical seat)
+            if label_a == label_b:
+                continue
 
             # Determine confidence tier
             if confidence >= self.tier_very_high:
@@ -64,10 +72,6 @@ class AlertGenerator:
             else:
                 tier = "LOW"
 
-            # Get seat labels
-            label_a = self.spatial.get_seat_label(track_id_a)
-            label_b = self.spatial.get_seat_label(track_id_b)
-
             # Extract evidence timestamps
             timestamps = []
             for window in result.get("evidence_windows", []):
@@ -78,7 +82,7 @@ class AlertGenerator:
 
             alert = {
                 "pair": pair_id,
-                "seat_labels": (label_a, label_b),
+                "seat_labels": tuple(sorted([label_a, label_b])),
                 "tier": tier,
                 "confidence": confidence,
                 "timestamps": timestamps,
@@ -86,7 +90,16 @@ class AlertGenerator:
                 "num_suspicious_windows": result["num_suspicious_windows"],
                 "evidence_windows": result.get("evidence_windows", []),
             }
-            alerts.append(alert)
+            raw_alerts.append(alert)
+
+        # Deduplicate: keep only the highest-confidence alert per seat pair
+        best_by_seat_pair = {}
+        for alert in raw_alerts:
+            key = alert["seat_labels"]
+            if key not in best_by_seat_pair or alert["confidence"] > best_by_seat_pair[key]["confidence"]:
+                best_by_seat_pair[key] = alert
+
+        alerts = list(best_by_seat_pair.values())
 
         # Sort by confidence (highest first)
         alerts.sort(key=lambda a: a["confidence"], reverse=True)
@@ -107,6 +120,7 @@ class AlertGenerator:
 
         behavior_names = {
             "mutual_gaze": "Mutual gaze (looking at each other)",
+            "headturn_hand_on_face": "Head turned sideways with hand on face",
             "sustained_head_turn": "Sustained head turn toward peer",
             "whispering_posture": "Whispering posture detected",
             "body_lean": "Body leaning toward peer",
